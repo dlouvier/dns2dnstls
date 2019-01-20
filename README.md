@@ -24,9 +24,9 @@ $ docker build . -t dns2dnstls
 ```
 and run it as:
 ```sh
-$ docker run -p 5353:53 -p 5353:53/udp -t dns2dnstls (you can use the already build image dlouvier/dns2dnstls:latest in docker hub)
+$ docker run -p 53535:53 -p 53535:53/udp -t dns2dnstls (you can use the already build image dlouvier/dns2dnstls:latest in docker hub)
 ```
-This will bound your local port 5353 to the 53 which the application has already setup as a constant. If you wish to change this setup, you can edit the main.go file.
+This will bound your local port 53535 to the 53 which the application has already setup as a constant. If you wish to change this setup, you can edit the main.go file.
 
 Please note you can run it on your local 53 too, but 1. you need to have root privileges and 2. ensure there is nothing already running there (you can check with lsof -i 53 )
 
@@ -35,11 +35,11 @@ Once the docker container is running on our local system we can use "kdig" to do
 
 - For UDP Requests
 ```sh
-$ kdig @127.0.0.1 -p 5353 www.google.com
+$ kdig @127.0.0.1 -p 53535 www.google.com
 ```
 - For TCP Requests
 ```sh
-$ kdig @127.0.0.1 +tcp p 5353 www.google.com
+$ kdig @127.0.0.1 +tcp p 53535 www.google.com
 ```
 
 ![screenshot_kdig](screenshot.png)
