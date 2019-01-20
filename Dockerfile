@@ -1,11 +1,10 @@
 FROM golang:1.11
-COPY . /tmp/
-
-WORKDIR /go/src/app
-COPY ./docker_test/main.go .
-
+WORKDIR /go/src/github.com/dlouvier/dns2dnstls
+COPY . . 
 RUN go get -d -v ./...
-RUN go install -v ./...
+RUN CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o app .
 
-CMD ["app"]
-ENTRYPOINT ["app", "-f=7", "-s=9"]
+FROM golang:1.11
+WORKDIR /root/
+COPY --from=0 /go/src/github.com/dlouvier/dns2dnstls/app .
+CMD ["./app"]  

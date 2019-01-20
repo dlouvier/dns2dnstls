@@ -42,6 +42,7 @@ func UDPServer() {
 		buffer := make([]byte, 512)
 		PkgSizeInt, addr, err := srv.ReadFromUDP(buffer)
 		Debugger(err)
+		log.Println("UDP Request received")
 
 		// I need to create an TCP package, which requires to know the size of the package
 		PkgSize := make([]byte, 2)
