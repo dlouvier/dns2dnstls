@@ -1,6 +1,10 @@
 package main
 
 import (
+	"bufio"
+	"encoding/binary"
+	"fmt"
+	"io"
 	"log"
 	"net"
 )
@@ -8,13 +12,30 @@ import (
 // TCPRequestHandler - Deal with the TCP Request
 func TCPRequestHandler(c net.Conn) {
 	log.Println("TCP Request received")
-	buffer := make([]byte, 512)
-	_, err := c.Read(buffer)
-	Debugger(err)
-
-	ans := QueryForwarder(buffer)
-	_, err = c.Write(ans)
-	Debugger(err)
+	// receive the message
 
 	defer c.Close()
+	reader := bufio.NewReader(c)
+	for {
+		// read client request data
+		bytes, err := reader.ReadBytes(byte('\n'))
+		if err != nil {
+			if err != io.EOF {
+				fmt.Println("failed to read data, err:", err)
+			}
+			return
+		}
+
+		fmt.Println(bytes)
+
+		PkgSize := make([]byte, 2)
+		binary.BigEndian.PutUint16(PkgSize, uint16(len(bytes)))
+
+		bytes = append(PkgSize, bytes...)
+
+		ans := QueryForwarder(bytes)
+		_, err = c.Write(ans)
+	}
+
+	//defer c.Close()
 }

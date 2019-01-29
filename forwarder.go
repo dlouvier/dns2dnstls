@@ -2,12 +2,19 @@ package main
 
 import (
 	"crypto/tls"
+	"fmt"
 )
 
 // QueryForwarder - TCP Client which connect to the external DNS service via TCP over TLS
 func QueryForwarder(q []byte) []byte {
+	fmt.Println("Aqui estoy yo")
 	// Create the connection
-	c, err := tls.Dial("tcp", ForwarderDNS, &tls.Config{})
+
+	tr := &tls.Config{
+		InsecureSkipVerify: true}
+
+	c, err := tls.Dial("tcp", ForwarderDNS, tr)
+
 	Debugger(err)
 
 	// Send the request to the forwarder
