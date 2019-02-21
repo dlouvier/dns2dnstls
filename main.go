@@ -10,6 +10,6 @@ const (
 )
 
 func main() {
-	go UDPServer()
+	//go UDPServer()
 	TCPServer()
 }
